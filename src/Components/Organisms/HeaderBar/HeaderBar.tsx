@@ -10,7 +10,9 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined'
 import { Link } from "react-router-dom"
 import LogoutButton from '../../../Logout'
-
+import {useAuth0} from '@auth0/auth0-react';
+import LoginButton from '../../../loginButton';
+//import {BrowserRouter as Router ,Routes,Route } from 'react-router-dom'
 
 const MainContainer = styled("div")({
     width: "100%",
@@ -199,7 +201,7 @@ interface Props{
     const classes=useStyles();
     const [search,setSearch]=useState(false);
     let [account, setAccount] =useState(false);
-
+    const { isLoading,isAuthenticated} = useAuth0();
     const expandAccountDropdown = () => {
       account ? setAccount(false) : setAccount(true);
     };
@@ -258,13 +260,19 @@ interface Props{
                                 </Button>
 
                                 </Box> </Box><Box >
+                                  
                                    <Link to ='/' >
                                     <Typography variant="body1" className={classes.library}>
                                         My Library
                                     </Typography>
                                     </Link>
+                                    
                             </Box></>
-      } <Box className={classes.main1}>
+      } 
+      {
+          !isAuthenticated
+          ? (<LoginButton />):
+        <Box className={classes.main1}>
          <Box className={classes.account} >
            <div data-testid="answer" >
               <Button  startIcon={ <Avatars alphabet="A" />    } endIcon= { <IconButton >
@@ -276,7 +284,9 @@ interface Props{
               </div>
            </Box>
           </Box>
+      }
           </Box>
+          
           </MainContainer2>
           </MainContainer>
           <div data-testid='logoutt' className={classes.logout1}>{account ? <LogoutButton  /> : null} </div>
